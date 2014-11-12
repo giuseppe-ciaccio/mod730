@@ -1,0 +1,33 @@
+#!/bin/bash
+
+EXPECTED_ARGS_NUMBER=1
+KEY_LEN=1024
+ERROR=1
+
+if [ $# -ne $EXPECTED_ARGS_NUMBER ]; then
+	echo "Usage: "$(basename $0)" number_of_priv_pub_key_pairs_to_generate";
+	exit $ERROR;
+fi
+
+
+if [ "$1" -eq "$1" ] 2>/dev/null; then
+	for i in $(eval echo {1..$1}); do
+		echo -n '. '
+		private_key_filename="as"$i"_priv.pem"
+		openssl genrsa -aes256 -passout pass:toor -out $private_key_filename $KEY_LEN 2> /dev/null
+		echo -n '. '
+		openssl rsa -in $private_key_filename -passin pass:toor -out $private_key_filename 2> /dev/null
+
+		echo -n '. '
+		public_key_filename="as"$i"_pub.pem"
+		openssl rsa -in "$private_key_filename" -out "$public_key_filename" -outform PEM -pubout 2> /dev/null
+		echo '. '
+		echo "Created private and public key pair "$i
+	done
+else
+	echo "You provided not a number"
+fi
+
+# example of signing:
+# openssl dgst -sha1 -sign priv.pem file.txt > file.txt.sig
+# openssl dgst -sha1 -verify public.pem -signature file.txt.sig file.txt

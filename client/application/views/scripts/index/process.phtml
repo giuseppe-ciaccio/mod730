@@ -1,0 +1,43 @@
+<?php
+    $this->title = "Richiesta autorizzazioni";
+    $this->headTitle($this->title);
+?>
+
+<h1>
+	<?php echo $this->escape($this->title); ?>
+</h1>
+
+<div id="container">
+	<p>
+		<?php
+			if ($this->error)
+				echo $this->escape($this->error);
+			else 
+				echo $this->escape($this->message);
+		?>
+	</p>
+	
+	<div>
+		<?php if ($this->error) { ?>
+			<a href="<?php echo $this->url(array('module' => 'default', 
+											'controller' => 'index', 
+											'action' => 'index')); ?>">Richiedi una nuova autorizzazione</a>
+		<?php } else {?>
+			<p>Redirezione alla pagina di compilazione tra 5 secondi... 
+				<a href="<?php echo $this->url(array('module' => 'default',
+										    			'controller' => 'index',
+										    			'action'     => 'fill'), 'default')?>">
+						(clic qui per passare subito)
+				</a>
+			</p>
+			<?php $this->headMeta()->appendHttpEquiv('refresh','5; '.$this->serverUrl().
+    																$this->url(array('module' => 'default',
+													    			'controller' => 'index',
+													    			'action'     => 'fill'), 'default')); ?>
+		<?php }?>
+	</div>
+</div>
+
+
+
+

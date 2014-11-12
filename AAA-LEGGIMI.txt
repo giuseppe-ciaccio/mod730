@@ -1,0 +1,34 @@
+Le varie directory contengono i sorgenti dei resource server (RS)
+(agenziaentrate, agenziaterritorio, comune)
+e quello della applicazione (client).
+In ciascuna di tali directory e' presente una sottodirectory "public";
+questa va esposta verso l'esterno da parte del web server.
+
+L'authorization server (AS) e' Oauthwo, che si suppone installato a parte.
+
+L'AS conosce gli endpoint dei RS
+(tabella "resource_server" nel dump oauthwo/scripts/data.mysql.sql),
+gli scope o "resource set" di ciascun RS (tabella "scope"),
+il nome logico con il quale esso e' noto presso i RS
+(oauthwo/models/Builder/Token.php -- sarebbe meglio che fosse in una tabella,
+e non nel sorgente),
+le applicazioni client accreditate e le rispettive credenziali
+(tabella "client"),
+gli utenti registrati (tabella "user")
+e gli id. di ciascun utente presso ciascun RS (tabella "user_reference").
+
+L'applicazione client conosce gli endpoint dell'AS
+(tabella "client" nel dump client/scripts/data.mysql.sql),
+le proprie credenziali di registrazione presso l'AS (ancora tabella "client"),
+e gli scope o "resource set" che utilizza (tabella "scope")
+ma non conosce i RS presso cui reperire i resource set: questi
+gli vengono rivelati dall'AS negli access token.
+
+Ogni RS conosce i nomi logici degli AS la cui autorita' esso riconosce
+e le rispettive chiavi pubbliche per la verifica di firma dei token (entrambi
+in tabella "as_pubkey" nel dump <resource-server>/scripts/rs.data.mysql.sql).
+Ogni token riporta il nome logico dell'AS che lo ha emesso;
+tale nome permette al RS di verificare la firma del token pescando
+la chiave giusta.
+Inoltre ogni RS conosce le proprie credenziali di registrazione presso gli AS
+(tabella "rs_info").

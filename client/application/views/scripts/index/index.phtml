@@ -1,0 +1,12 @@
+<?php
+    $this->title = "Seleziona i dati da scaricare";
+    $this->headTitle($this->title);
+?>
+
+<h1><?php echo $this->escape($this->title); ?></h1>
+<div>
+<?php 
+ 	$this->options_form->checkAllScopes();
+ 	echo $this->options_form; 
+?>
+</div>

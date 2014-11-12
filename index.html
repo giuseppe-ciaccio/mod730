@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<title>Open Data e "smart dislosure" - OAuth2.0 - Dichiarazione dei redditi</title>
+	</head>
+	<body>
+		<h1>
+			Open data e &quot;smart disclosure&quot;: il caso della dichiarazione dei redditi</h1>
+		<p>
+			L&#39;applicazione permette di automatizzare la compilazione della dichiarazione dei redditi (la demo presenta una versione semplificata del modello 730).</p>
+		<p>
+			Viene utilizzato il framework OAuth2.0.</p>
+		<p>
+			L&#39;Authorization Server &egrave; stato implementato come un modulo PHP in Zend Framework da Antonio Pastorino. L&#39;applicazione client permette indirizzare l&#39;utente allo Authorization Server affinch&egrave; questo dia l&#39;autorizzazione per i dati da scaricare e impiegare nella compilazione automatica della dichiarazione dei redditi.</p>
+		<p>
+			I dati che servono per la compilazione sono memorizzati presso vari Resource Server:</p>
+		<ol>
+			<li>
+				<a href="https://localhost/comune/">Resource Server del Comune</a>;</li>
+			<li>
+				<a href="https://localhost/agenziaentrate/">Resource Server dell&#39;Agenzia delle Entrate</a>;</li>
+			<li>
+				<a href="https://localhost/agenziaterritorio/">Resource Server dell&#39;Agenzia del Territorio</a>;</li>
+		</ol>
+		<p>
+			L&#39;applicazione client si trova <a href="https://localhost/client/">qui</a>.</p>
+		<p>
+			L&#39;applicazione client e i vari Resource Server sono implementati in PHP usando Zend Framework.</p>
+	</body>
+</html>

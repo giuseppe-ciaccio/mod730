@@ -1,0 +1,31 @@
+<?php switch ($this->richiesta) {
+	case 'spese_mediche': ?>
+		<table class="myTable">
+		<caption>Dettaglio spese mediche</caption>
+		  <tr>
+		    <th style="width: 10px;">Id</th>
+		    <th style="width: 50px;">Importo (€)</th>
+		    <th style="width: 100px;">Prestatore</th>
+		    <th style="width: 150px;">Indirizzo</th>
+		    <th style="width: 50px;">Data</th>
+		    <th style="width: 20px;">Aliq. IVA (%)</th>
+		    <th style="width: 150px;">Descrizione</th>
+		  </tr>
+		  <?php foreach ($this->spese_mediche as $sm) {?>
+		  	<tr>
+			    <td><?php echo $sm['id']; ?></td>
+			    <td><?php echo $sm['importo']; ?></td>
+			    <td><?php echo $sm['prestatore']; ?></td>
+			    <td><?php echo $sm['indirizzo_prestatore']; ?></td>
+			    <td><?php echo $sm['data_acquisto']; ?></td>
+			    <td><?php echo $sm['aliquota_iva']; ?></td>
+			    <td><?php echo $sm['descrizione']; ?></td>
+		  	</tr>
+		  <?php }?>
+		</table>
+<?php break;?>
+<?php default: ?>
+		<p>Richiesta non riconosciuta</p>
+<?php break;
+}
+?>

@@ -1,0 +1,502 @@
+<?php
+    $this->title = "Compilazione";
+    $this->headTitle($this->title);
+?>
+
+<h1>
+	<?php echo $this->escape($this->title); ?>
+</h1>
+
+<?php if ($this->no_token) {?>
+	<p>Non sono presenti le autorizzazioni. 
+		Riprovare seguendo il <a href="<?php echo $this->url(array('module' => 'default', 
+											'controller' => 'index', 
+											'action' => 'index'));?>">
+										link</a>.</p>
+<?php 
+		return;
+	}
+?>
+
+<?php if ($this->error_message) {?>
+	<p>
+		C'è stato un errore: <?php echo $this->escape($this->error_message);?>.</<br>
+		<a href="<?php echo $this->url(); ?>">Ricarica</a> la pagina oppure riprova a 
+		chiedere una <a href="<?php echo $this->url(array('module' => 'default', 
+											'controller' => 'index', 
+											'action' => 'index'));?>">nuova autorizzazione</a>. 
+	</p>
+
+<?php 
+	return;
+	}
+?>
+
+<?php if ($this->access_errors) {?>
+<div>
+	<p>Ci sono stati degli errori:</p>
+	<table class="myTable" style="width: 70%">
+		<tr>
+			<th>Descrizione dati</th>
+			<th>Descrizione errore</th>
+		</tr>
+		<?php foreach ($this->access_errors as $ae) {?>
+			<tr>
+				<td>
+					<?php for ($i = 0; $i < count($ae[1]) - 1; $i++) {?>
+						<?php echo $ae[1][$i].'; '?>
+					<?php }?>
+					<?php echo $ae[1][$i]?>
+				</td>
+				<td>
+					<?php echo $ae[0]?>
+				</td>
+			</tr>
+		<?php }?>
+	</table>
+	<p>Richiedi l'<a href="<?php echo $this->url(array('module' => 'default', 
+											'controller' => 'index', 
+											'action' => 'index'));?>">autorizzazione</a>.</p>
+</div>
+<?php 
+// 	return;
+}
+?>
+
+
+<?php //use the $this->form_datas?>
+
+
+<div id="mod730">
+<h2>Compilazione del Modello 730</h2>
+
+<div id="contribuente">
+<h4>Dati del contribuente</h4>
+<table border="0" cellpadding="1" cellspacing="1">
+	<tbody>
+		<tr>
+			<td>Codice Fiscale</td>
+			<td><input maxlength="13" name="codice_fiscale" type="text" value="<?php echo $this->form_data->cf(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Nome</td>
+			<td><input name="nome" type="text" value="<?php echo $this->form_data->nome(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Cognome</td>
+			<td><input name="cognome" type="text" value="<?php echo $this->form_data->cognome(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Sesso</td>
+			<td>
+				<select name="sesso">
+					<option value="M" <?php if ($this->form_data->sesso() == 'M') echo 'select="selected"';?>>M</option>
+					<option value="F" <?php if ($this->form_data->sesso() == 'F') echo 'select="selected"';?>>F</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Data di nascita</td>
+			<td><input name="data_nascita" type="text" value="<?php echo $this->form_data->dataNascita(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Comune di Nascita</td>
+			<td><input name="comune_nascita" type="text" value="<?php echo $this->form_data->comuneNascita(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Provincia</td>
+			<td><input maxlength="2" name="provincia_nascita" type="text" value="<?php echo $this->form_data->provinciaNascita(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Stato civile</td>
+			<td>
+				<select name="stato_civile">
+					<option value="celibe/nubile" <?php if ($this->form_data->statoCivile() == 'celibe/nubile') echo 'selected="selected"';?>>celibe/nubile</option>
+					<option value="coniugato/a" <?php if ($this->form_data->statoCivile() == 'coniugato/a') echo 'selected="selected"';?>>coniugato/a</option>
+					<option value="vedovo/a" <?php if ($this->form_data->statoCivile() == 'vedovo/a') echo 'selected="selected"';?>>vedovo/a</option>
+					<option value="separato/a" <?php if ($this->form_data->statoCivile() == 'separato/a') echo 'selected="selected"';?>>separato/a</option>
+					<option value="divorziato/a" <?php if ($this->form_data->statoCivile() == 'divorziato/a') echo 'selected="selected"';?>>divorziato/a</option>
+					<option value="tutelato/a" <?php if ($this->form_data->statoCivile() == 'tutelato/a') echo 'selected="selected"';?>>tutelato/a</option>
+					<option value="minore" <?php if ($this->form_data->statoCivile() == 'minore') echo 'selected="selected"';?>>minore</option>
+				</select>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+	<caption style="font-size: small;">Residenza anagrafica</caption>
+	<tbody>
+		<tr>
+			<td>Comune</td>
+			<td><input name="comune_residenza" type="text" value="<?php echo $this->form_data->comuneResidenza(); ?>" /></td>
+		</tr>
+		<tr>
+			<td>Provincia</td>
+			<td><input maxlength="2" name="provincia_residenza" type="text" value="<?php echo $this->form_data->provinciaResidenza(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Indirizzo</td>
+			<td>
+<!-- 				<select name="indirizzo_tipologia"> -->
+<!-- 					<option value="via">via</option> -->
+<!-- 				</select> -->
+				<input name="indirizzo_tipologia" size="5" type="text" value="<?php echo $this->form_data->indirizzoTipologia(); ?>"/>
+				<input name="via_residenza" type="text" value="<?php echo $this->form_data->indirizzoResidenza(); ?>"/>
+				<input name="civico_residenza" size="5" type="text" value="<?php echo $this->form_data->numcivicoResidenza(); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<td>Frazione</td>
+			<td><input name="frazione_residenza" type="text" value="<?php echo $this->form_data->frazioneResidenza(); ?>" /></td>
+		</tr>
+		<tr>
+			<td>Data della variazione</td>
+			<td><input name="ultima_variazione_residenza" type="text" value="<?php echo $this->form_data->ultimaVariazioneResidenza(); ?>"/></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<div id="famigliari_carico">
+<h4>Familiari a carico</h4>
+<table class="myTable">
+	<tbody>
+		<tr>
+			<th colspan="4">&nbsp;</th>
+			<th>Codice Fiscale</th>
+			<th>Mesi<br />a carico</th>
+			<th>Minore<br />di 3 anni</th>
+			<th>%</th>
+			<th>Detrazione 100%<br />affidamento figli</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>Coniuge</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><input name="cf_coniuge" type="text" value="<?php $c = $this->form_data->coniuge(); if (!is_null($c)) echo $c['cf'];?>"/></td>
+			<td><input name="mesi_carico_coniuge" size="2" type="text" /></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<?php $f1 = $this->form_data->primoFiglio(); ?>
+			<td>2</td>
+			<td>Primo Figlio</td>
+			<td>&nbsp;</td>
+			<td><label for="cb_disabile1">Disabile</label><br>
+				<input type="checkbox" id='cb_disabile1' /></td>
+			<td><input name="cf_f1" type="text" value="<?php if (!is_null($f1)) echo $f1['cf']; ?>"/></td>
+			<td><input name="mesi_carico_f1" size="2" type="text" /></td>
+			<td><input name="minore_3anni_f1" size="2" type="text" value="<?php if (!is_null($f1))  echo $f1['minore_tre_anni']; ?>"/></td>
+			<td><input name="perc_f1" size="2" type="text" /></td>
+			<td><input name="detr_f1" size="2" type="text" /></td>
+		</tr>
+		<?php $this->altrifigli = $this->form_data->altriFigli();
+			  $max = max(array(count($this->altrifigli), 4));
+			  for ($i=0; $i < $max; ++$i) {?>
+		<tr>
+			<td><?php echo $i + 3; ?></td>
+			<td><label for="cb_f<?php echo $i + 2; ?>">Figlio</label><br>
+				<input type="checkbox" id='cb_f<?php echo $i + 2; ?>' <?php if (isset($this->altrifigli[$i]) && $this->altrifigli[$i]['tipo'] == 'figlio') echo 'checked="checked"'; ?>/></td>
+			<td><label for="cb_altro<?php echo $i + 2; ?>">Altro</label><br>
+				<input type="checkbox" id='cb_altro<?php echo $i + 2; ?>' <?php if (isset($this->altrifigli[$i]) && $this->altrifigli[$i]['tipo'] == 'altro') echo 'checked="checked"'; ?>/></td>
+			<td><label for="cb_disabile<?php echo $i + 2; ?>">Disabile</label><br>
+				<input type="checkbox" id='cb_disabile<?php echo $i + 2; ?>'/></td>
+			<td><input name="cf_f<?php echo $i; ?>" type="text" value="<?php if (isset($this->altrifigli[$i])) echo $this->altrifigli[$i]['cf']; ?>"/></td>
+			<td><input name="mesi_carico_f<?php echo $i + 2; ?>" size="2" type="text" /></td>
+			<td><input name="minore_3anni_f<?php echo $i + 2; ?>" size="2" type="text" value="<?php if (isset($this->altrifigli[$i])) echo $this->altrifigli[$i]['minore_tre_anni']; ?>"/></td>
+			<td><input name="perc_f<?php echo $i + 2; ?>" size="2" type="text" /></td>
+			<td><input name="detr_f<?php echo $i + 2; ?>" size="2" type="text" /></td>
+		</tr>
+		<?php }?>
+	</tbody>
+</table>
+</div>
+
+<div id="sost_imposta">
+<h4>Sostituto di imposta</h4>
+<table border="0" cellpadding="1" cellspacing="1">
+	<tbody>
+		<tr>
+			<td>Denominazione</td>
+			<td><input name="sostituto_imposta_denominazione" type="text" value="<?php echo $this->form_data->sostitutoImpostaDenominazione(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Codice Fiscale</td>
+			<td><input name="sostituto_imposta_cf" type="text" value="<?php echo $this->form_data->sostitutoImpostaCf(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Comune</td>
+			<td><input name="sostituto_imposta_comune" type="text" value="<?php echo $this->form_data->sostitutoImpostaComune(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Provincia</td>
+			<td><input name="sostituto_imposta_provincia" type="text" value="<?php echo $this->form_data->sostitutoImpostaProvincia(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Indirizzo</td>
+			<td>
+				<input name="sostituto_imposta_tipologia_indirizzo" type="text" size="5" value="<?php echo $this->form_data->sostitutoImpostaTipologiaIndirizzo(); ?>"/>
+				<input name="sostituto_imposta_indirizzo" type="text" value="<?php echo $this->form_data->sostitutoImpostaIndirizzo(); ?>"/>
+				<input name="sostituto_imposta_num_civico" type="text" size="3" value="<?php echo $this->form_data->sostitutoImpostaNumCivico(); ?>"/>
+			</td>
+		</tr>
+		<tr>
+			<td>CAP</td>
+			<td><input name="sostituto_imposta_cap" type="text" value="<?php echo $this->form_data->sostitutoImpostaCap(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Frazione</td>
+			<td><input name="sostituto_imposta_frazione" type="text" value="<?php echo $this->form_data->sostitutoImpostaFrazione(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Numero di tel.</td>
+			<td><input name="sostituto_imposta_telefono" type="text" value="<?php echo $this->form_data->sostitutoImpostaTelefono(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td><input name="sostituto_imposta_email" type="text"value="<?php echo $this->form_data->sostitutoImpostaEmail(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Codice Sede</td>
+			<td><input name="sostituto_imposta_codice_sede" type="text" size="5" value="<?php echo $this->form_data->sostitutoImpostaCodiceSede(); ?>"/></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<div id="quadro_a">
+<h4>Quadro A Redditi dei terreni - Dati prelevabili dal'Agenzia del Territorio e dall'Agenzia delle Entrate - in <strong>questa demo</strong> questo quadro non è automatizzato</h4>
+<!-- 
+<table class="myTable">
+	<tbody>
+		<tr>
+			<th rowspan="2">N.<br />Ord.</th>
+			<th rowspan="2">Reddito<br />Dominicale</th>
+			<th rowspan="2">Titolo</th>
+			<th rowspan="2">Reddito<br />Agrario</th>
+			<th colspan="2">Possesso</th>
+			<th rowspan="2">Canone di affitto<br />in regime vincolistico</th>
+			<th rowspan="2">Casi<br />Particolari</th>
+			<th rowspan="2">Continuazione (*)</th>
+			<th rowspan="2">Esenzione<br />IMU</th>
+			<th rowspan="2">Coltivatore<br />diretto<br />o IAP</th>
+		</tr>
+		<tr>
+			<td>Giorni</td>
+			<td>%</td>
+		</tr>
+		<?php for ($i = 1; $i < 9; ++$i) {?>
+			<tr>
+				<td>A<?php echo $i; ?></td>
+				<td><input name="reddito_dominicale_a<?php echo $i; ?>" type="text" /></td>
+				<td>
+					<select name="titolo_a<?php echo $i; ?>">
+						<option selected="selected" value=""></option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+				</td>
+				<td><input name="reddito_agrario_a<?php echo $i; ?>" type="text" /></td>
+				<td><input maxlength="3" name="possesso_giorni_a<?php echo $i; ?>" size="4" type="text" /></td>
+				<td><input maxlength="3" name="possesso_perc_a<?php echo $i; ?>" size="3" type="text" /></td>
+				<td><input name="cannone_affitto_a<?php echo $i; ?>" type="text" /></td>
+				<td>
+					<select name="casi_particolari_a<?php echo $i; ?>">
+						<option selected="selected" value=""></option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+					</select>
+				</td>
+				<td><input name="continuazione_a<?php echo $i; ?>" type="checkbox" /></td>
+				<td><input name="esenzione_imu_a<?php echo $i; ?>" type="checkbox" /></td>
+				<td><input name="coltivatore_diretto_a<?php echo $i; ?>" type="checkbox" /></td>
+			</tr>
+		<?php }?>
+	</tbody>
+</table>
+
+-->
+
+</div>
+
+<div id="quadro_b">
+<h4>Quadro B Redditi dei Fabbricati</h4>
+<table class="myTable">
+	<caption>Sezione I - Redditi dei fabbricati</caption>
+	<tbody>
+		<tr>
+			<th rowspan="2">Id.<br>Fabb.</th>
+			<th rowspan="2">Rendita</th>
+			<th rowspan="2">Utilizzo</th>
+			<th colspan="2">Possesso</th>
+			<th rowspan="2">Cannone<br>Locazione</th>
+			<th rowspan="2">Codice<br>comune</th>
+		</tr>
+		<tr>
+			<th>Giorni</th>
+			<th>%</th>
+		</tr>
+		<?php 
+			$this->fi = $this->form_data->fabbricati();
+			$max = max(array(count($this->fi), 5));
+			for ($i=0; $i < $max; ++$i) {
+		?>
+			<tr>
+				<td><?php if(isset($this->fi[$i])) echo $this->fi[$i]['id']; ?></td>
+				<td><input size="8" name="rendita<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i])) echo $this->fi[$i]['rendita']; ?>" /></td>
+				<td>
+					<select name="utilizzo<?php echo $i; ?>">
+						<option value="a_disposizione" <?php if(isset($this->fi[$i]) && count($this->fi[$i]['contratti']) == 0) echo 'selected="selected"';?>>A disposizione</option>
+						<option>Prima casa</option>
+						<option value="locato" <?php if(isset($this->fi[$i]) && count($this->fi[$i]['contratti']) != 0) echo 'selected="selected"';?>>Locato</option>
+					</select>
+				</td>
+				<td><input size="3" name="possesso_giorni<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i])) echo $this->fi[$i]['possesso_giorni']; ?>" /></td>
+				<td><input size="3" name="possesso_perc<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i])) echo $this->fi[$i]['possesso_perc']; ?>" /></td>
+				<td><input size="8" name="canone<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i]) && isset($this->fi[$i]['contratti'][0]))  echo $this->fi[$i]['contratti'][0]['canone']; ?>" /></td>
+				<td><input size="4" name="codice_comune<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i])) echo $this->fi[$i]['codice_comune']; ?>" /></td>
+			</tr>
+		<?php }?>
+	</tbody>
+</table>
+
+<table class="myTable">
+	<caption>Sezione II - Dati relativi ai contratti di locazione</caption>
+	<tbody>
+		<tr>
+			<th rowspan="2">Id.<br>Fabb.</th>
+			<th colspan="3">Estremi registrazione del contratto</th>
+		</tr>
+		<tr>
+			<th>Data</th>
+			<th>Serie</th>
+			<th>Numero e<br>sottonumero</th>
+		</tr>
+		<?php 
+			$this->fi = $this->form_data->fabbricati();
+			$max = max(array(count($this->fi), 2));
+			for ($i=0; $i < $max; ++$i) {
+		?>
+			<tr>
+				<td><?php if(isset($this->fi[$i]) && count($this->fi[$i]['contratti']) != 0) echo $this->fi[$i]['id']; ?></td>
+				<td><input size="8" name="data<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i]) && count($this->fi[$i]['contratti']) != 0) echo $this->fi[$i]['contratti'][0]['dal']; ?>" /></td>
+				<td><input size="8" name="serie<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i]) && count($this->fi[$i]['contratti']) != 0) echo $this->fi[$i]['contratti'][0]['serie']; ?>" /></td>
+				<td><input size="8" name="numero<?php echo $i; ?>" type="text" value="<?php if(isset($this->fi[$i]) && count($this->fi[$i]['contratti']) != 0) echo $this->fi[$i]['contratti'][0]['numero']; ?>" /></td>
+			</tr>
+		<?php }?>
+	</tbody>
+</table>
+</div>
+
+<div id="quadro_c">
+<h4>Quadro C Redditi di lavoro dipendente e assimilati</h4>
+<table border="0" cellpadding="1" cellspacing="1">
+	<tbody>
+		<tr>
+			<td>Reddito</td>
+			<td><input name="quadro_c_reddito" type="text" value="<?php echo $this->form_data->reddito(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Tipologia Reddito</td>
+			<td>
+				<select name="quadro_c_tipologia_reddito"> 				
+					<option value="empty"></option>
+					<option value="pensione" <?php if ($this->form_data->tipologiaReddito() == 'pensione') echo 'selected="selected"';?>>Pensione</option>
+					<option value="dipendente_o_assimilati" <?php if ($this->form_data->tipologiaReddito() == 'dipendente_o_assimilati') echo 'selected="selected"';?>>Dipendente o assimilati</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Periodo di Lavoro</td>
+			<td><input name="quadro_c_periodo_lavoro" type="text" value="<?php echo $this->form_data->periodoLavoro(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Ritenute Irpef</td>
+			<td><input name="quadro_c_rit_irpef" type="text" value="<?php echo $this->form_data->ritIrpef(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Ritenute Add.le<br>Regionale</td>
+			<td><input name="quadro_c_rit_add_reg" type="text" value="<?php echo $this->form_data->ritAddReg(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Ritenute acconto<br>add.le comunale<br>anno precedente<br></td>
+			<td><input name="quadro_c_rit_acc_add_com_prec" type="text" value="<?php echo $this->form_data->ritAccAddComPrec(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Ritenute saldo<br>add.le comunale<br>anno precedente<br></td>
+			<td><input name="quadro_c_rit_sal_add_com_prec" type="text" value="<?php echo $this->form_data->ritSalAddComPrec(); ?>"/></td>
+		</tr>
+		<tr>
+			<td>Ritenute acconto<br>add.le comunale<br>anno corrente<br></td>
+			<td><input name="quadro_c_rit_acc_add_com_cur" type="text" value="<?php echo $this->form_data->ritAccAddComCur(); ?>"/></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<div id="quadro_d">
+<h4>Quadro D Altri redditi</h4>
+<p>Sezione non implementata in questa demo.</p>
+</div>
+
+<div id="quadro_e">
+<h4>Quadro E Oneri e spese</h4>
+<table border="0" cellpadding="1" cellspacing="1">
+	<tbody>
+		<tr>
+			<td><a target="_blank" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'ajax', 'richiesta' => 'spese_mediche')); ?>">Spese Mediche</a>
+			<?php 
+// 			echo $this->ajaxLink("Spese mediche",
+//                     		$this->url(array('module' => 'default', 
+// 											'controller' => 'index', 
+// 											'action' => 'ajax')),
+//                     		array('update' => '#spese_dettagli',
+// 								  'method' => 'POST'),
+// 							array('richiesta' => 'spese_mediche'));
+							?></td>
+			<td><input name="quadro_e_spese_mediche" type="text" value="<?php echo $this->form_data->speseMedicheTotale(); ?>"/></td>
+		</tr>
+<!-- 	<tr>
+			<td>Interessi per mutui</td>
+			<td><input name="quadro_e_interessi_mutui" type="text" value="<?php echo $this->form_data->interessiMutui(); ?>"/></td>
+		</tr>
+-->
+	</tbody>
+</table>
+<div id="spese_dettagli">
+
+</div>
+</div>
+
+<div id="quadro_f">
+<h4>Quadro F Acconti, ritenute, eccedenze e altri dati - Dati prelevabili dall'Agenzia delle Entrate - in <strong>questa demo</strong> questo quadro non è automatizzato</h4>
+</div>
+
+<div id="quadro_g">
+<h4>Quadro G Crediti d'Imposta - Dati prelevabili dall'Agenzia delle Entrate - in <strong>questa demo</strong> questo quadro non è automatizzato</h4>
+</div>
+
+<div id="quadro_i">
+<h4>Quadro I IMU</h4>
+</div>
+
+<div id="firma">
+<h4>Firma del contribuente</h4>
+</div>
+
+</div>
