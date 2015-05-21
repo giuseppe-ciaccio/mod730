@@ -4,7 +4,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 	protected function _initLogging()
 	{
-		$log = new Zend_Log(new Zend_Log_Writer_Stream('/tmp/mod730-RS-co.log'));
+		$log = new Zend_Log(new Zend_Log_Writer_Stream(
+			'/tmp/mod730-RS-comune.log'));
 		Zend_Registry::set('log',$log);
 	}
 
@@ -12,10 +13,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 	{
 		$this->bootstrap("frontController");
 		$frontController = Zend_Controller_Front::getInstance();
-		$restRoute = new Zend_Rest_Route($frontController, array(), array(
-				"server" => array("data"),
-		));
+		$restRoute = new Zend_Rest_Route(
+			$frontController, array(),
+			array("server" => array("data"),)
+		);
 		$frontController->getRouter()->addRoute("rest", $restRoute);
 	}
 }
-

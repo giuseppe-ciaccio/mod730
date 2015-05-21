@@ -16,9 +16,3 @@ INSERT INTO `nucleo_familiare` (`cf`,`tipo`,`minore_tre_anni`,`cf_app`) VALUES (
 INSERT INTO `nucleo_familiare` (`cf`,`tipo`,`minore_tre_anni`,`cf_app`) VALUES ('RSSCHR90T50A562J', 'primo_figlio', 0, 'RSSMRA85T10A562S');
 INSERT INTO `nucleo_familiare` (`cf`,`tipo`,`minore_tre_anni`,`cf_app`) VALUES ('RSSFNC94T10A562A', 'figlio', 0, 'RSSMRA85T10A562S');
 
-
-
-
-
- 
- 

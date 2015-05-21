@@ -8,24 +8,16 @@
 </h1>
 
 <?php if ($this->no_token) {?>
-	<p>Non sono presenti le autorizzazioni. 
-		Riprovare seguendo il <a href="<?php echo $this->url(array('module' => 'default', 
-											'controller' => 'index', 
-											'action' => 'index'));?>">
-										link</a>.</p>
+	<p>Autorizzazioni mancanti. Riprovare seguendo il <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'index'));?>"> link</a>.</p>
+
 <?php 
 		return;
 	}
 ?>
 
 <?php if ($this->error_message) {?>
-	<p>
-		C'è stato un errore: <?php echo $this->escape($this->error_message);?>.</<br>
-		<a href="<?php echo $this->url(); ?>">Ricarica</a> la pagina oppure riprova a 
-		chiedere una <a href="<?php echo $this->url(array('module' => 'default', 
-											'controller' => 'index', 
-											'action' => 'index'));?>">nuova autorizzazione</a>. 
-	</p>
+	<p>Errore: <?php echo $this->escape($this->error_message);?>.</<br>
+	<a href="<?php echo $this->url(); ?>">Ricarica</a> la pagina oppure riprova a chiedere una <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'index'));?>">nuova autorizzazione</a>.</p>
 
 <?php 
 	return;
@@ -54,17 +46,13 @@
 			</tr>
 		<?php }?>
 	</table>
-	<p>Richiedi l'<a href="<?php echo $this->url(array('module' => 'default', 
-											'controller' => 'index', 
-											'action' => 'index'));?>">autorizzazione</a>.</p>
+	<p>Richiedi l'<a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'index'));?>">autorizzazione</a>.</p>
 </div>
 <?php 
 // 	return;
 }
 ?>
 
-
-<?php //use the $this->form_datas?>
 
 
 <div id="mod730">
@@ -137,9 +125,6 @@
 		<tr>
 			<td>Indirizzo</td>
 			<td>
-<!-- 				<select name="indirizzo_tipologia"> -->
-<!-- 					<option value="via">via</option> -->
-<!-- 				</select> -->
 				<input name="indirizzo_tipologia" size="5" type="text" value="<?php echo $this->form_data->indirizzoTipologia(); ?>"/>
 				<input name="via_residenza" type="text" value="<?php echo $this->form_data->indirizzoResidenza(); ?>"/>
 				<input name="civico_residenza" size="5" type="text" value="<?php echo $this->form_data->numcivicoResidenza(); ?>" />

@@ -33,13 +33,12 @@ DB_USER='comune'
 DB_USER_PWD='comune123'
 
 # RS has two databases
-DATA_INSTANCE='comune'
-RS_DB_NAME=$DATA_INSTANCE'_rs'
+RS_DB_NAME='comune_rs'
 RS_DB_SCHEMA=$CURRENT_DIR'/rs.schema.mysql.sql'
 RS_DB_DATA=$CURRENT_DIR'/rs.data.mysql.sql'
-DATA_DB_NAME=$DATA_INSTANCE'_dati'
-DATA_DB_SCHEMA=$CURRENT_DIR'/'$DATA_INSTANCE'.schema.mysql.sql'
-DATA_DB_DATA=$CURRENT_DIR'/'$DATA_INSTANCE'.data.mysql.sql'
+DATA_DB_NAME='comune_dati'
+DATA_DB_SCHEMA=$CURRENT_DIR'/comune.schema.mysql.sql'
+DATA_DB_DATA=$CURRENT_DIR'/comune.data.mysql.sql'
 
 
 
@@ -73,13 +72,13 @@ function create_user() {
 	                                     $DB_USER $DB_USER_PWD \
 	                                     $RS_DB_NAME $DATA_DB_NAME
     check_error 'Error creating the new user or its databases...'
-	echo 'The new user and its databases were created successfully'
+	echo 'The new user and the databases were created successfully'
 }
 
 # populates the DBs
 function populate() {
     check_files
-    php $CURRENT_DIR/load.mysql.php --data_instance $DATA_INSTANCE \
+    php $CURRENT_DIR/load.mysql.php \
                       --rs_dbschema $RS_DB_SCHEMA \
                       --rs_dbdata $RS_DB_DATA \
                       --rs_withdata \
@@ -97,7 +96,6 @@ function populate() {
     echo 'host = '$DB_HOST' in application/configs/application.ini'
     echo 'dbname = '$RS_DB_NAME' in application/configs/application.ini'
     echo 'dbname = '$DATA_DB_NAME' in application/modules/configs/config.ini'
-    echo 'const DB_NAME = '$DATA_INSTANCE' in application/modules/comune/Bootstrap.php'
     echo '================================================================================'
     echo
 }
@@ -130,7 +128,7 @@ function clean() {
 	                                     $DB_USER $DB_USER_PWD \
 	                                     $RS_DB_NAME $DATA_DB_NAME
     check_error 'Error deleting the user or its databases...'
-	echo 'The mysql db user and its databases were deleted successfully'
+	echo 'The mysql user and the databases were deleted successfully'
 }
 
 ################################################################################

@@ -18,37 +18,46 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Database: `comune_rs`
 --
-CREATE DATABASE IF NOT EXISTS `comune_rs` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `comune_rs`;
 
--- --------------------------------------------------------
-
 --
--- Struttura della tabella `as_pubkey`
+-- Struttura della tabella `rset_info`
 --
 
-DROP TABLE IF EXISTS `as_pubkey`;
-CREATE TABLE IF NOT EXISTS `as_pubkey` (
-  `id` varchar(200) NOT NULL,
-  `path` varchar(1000) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='This table holds the Authorization Server public key file path';
-
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `rs_info`
---
-
-DROP TABLE IF EXISTS `rs_info`;
-CREATE TABLE IF NOT EXISTS `rs_info` (
-  `id` varchar(200) NOT NULL,
-  `shared_secret_key` varchar(500) NOT NULL,
+DROP TABLE IF EXISTS `rset_info`;
+CREATE TABLE IF NOT EXISTS `rset_info` (
+  `rset_id` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `uri` varchar(200) NOT NULL,
+  `table` varchar(200) NOT NULL,
   `description` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='This table holds the Resource Server information';
+  `type` varchar(200) DEFAULT NULL,
+  `colselect` varchar(300) NOT NULL,
+  PRIMARY KEY (`rset_id`),
+  FULLTEXT KEY `name` (`name`,`uri`,`description`,`type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Struttura della tabella `rset_scope`
+--
 
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `rset_scope`;
+CREATE TABLE IF NOT EXISTS `rset_scope` (
+  `scope_uri` varchar(100) NOT NULL,
+  `rset_id` varchar(100) NOT NULL,
+  PRIMARY KEY (`scope_uri`,`rset_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Struttura della tabella `scope`
+--
+
+DROP TABLE IF EXISTS `scope`;
+CREATE TABLE IF NOT EXISTS `scope` (
+  `scope_id` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `uri` varchar(200) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  PRIMARY KEY (`scope_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

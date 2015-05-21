@@ -2,33 +2,28 @@
 
 class Server_DataController extends Zend_Rest_Controller
 {
-	private static $DEBUG = 1;
-	private static $SKIP_ERROR_CONTROL = false;
+    private static $DEBUG = 1;
+    private static $SKIP_ERROR_CONTROL = false;
 	
 	
-	/*
-	 * Authorization Header constants
-	 */
-	/**
-	 * Authentication header and authentication scheme 
-	 * as def by rfc 6750 section 2.1. Authorization Request Header Field
-	 * the header $this::$AUTH_HEADER must contain 
-	 * $this::$AUTH_HEADER_COMPONENTS_COUNT components
-	 * @var int
-	 */
-	private static $AUTH_HEADER_COMPONENTS_COUNT = 2;
-	/**
-	 * @var string
-	 */
+/*
+ * Authorization Header constants
+ */
+
+/**
+ * Authentication header and authentication scheme 
+ * as def. by rfc 6750 section 2.1. Authorization Request Header Field
+ * the header $this::$AUTH_HEADER must contain 
+ * $this::$AUTH_HEADER_COMPONENTS_COUNT components
+ * @var int
+ */
+    private static $AUTH_HEADER_COMPONENTS_COUNT = 2;
     private static $AUTH_HEADER = 'Authorization';
-    /**
-     * @var string
-     */
     private static $AUTH_TOKEN_TYPE = 'Bearer';
-    /*
-     * ************************************************************************
-     */
     
+/*
+ * ************************************************************************
+ */
     
     /*
      * The Authorization Response Header constants
@@ -70,10 +65,10 @@ class Server_DataController extends Zend_Rest_Controller
     private static $ERROR_INSUFFICIENT_SCOPE_HTTP_STATUS_CODE = 403; /* Forbidden */
     
     private static $ERROR_HTTP_STATUS_CODE_PARAM_STRING = 'http_status_code';
-    /*
-     * ************************************************************************
-     */
     
+/*
+ * ************************************************************************
+ */
     
     /*
      * Error codes
@@ -139,10 +134,10 @@ class Server_DataController extends Zend_Rest_Controller
     private static $INSUFFICIENT_SCOPE_ERROR = 14;
     
     private static $SERVER_INSTANTIATION_ERROR = 15;
-    /*
-     * ************************************************************************
-     */
-    
+
+/*
+ * ************************************************************************
+ */
     
     /**
      * the param name used to pass the access token as 
@@ -187,31 +182,31 @@ class Server_DataController extends Zend_Rest_Controller
     
     /**
      * @var array of string representing the rest parameters.
-     * 						Parameters like par1=val1, par2=val2 in the link
-     * 						http://resource/par1/val1/par2/val2
+     * Parameters like par1=val1, par2=val2 in the link
+     * http://resource/par1/val1/par2/val2
      */
     private $restRequestParams = null;
     
     /**
      * @var array of string representing the parameters passed in the 
-     * 						query string of the link.
-     * 						Parameters like par1=val1, par2=val2 in the link
-     * 						http://resource?par1=val1&par2=val2	
+     * query string of the link.
+     * Parameters like par1=val1, par2=val2 in the link
+     * http://resource?par1=val1&par2=val2	
      */
     private $queryRequestParams = null;
     
     /**
      * @var array of string representing the parameters passed in the
-     * 						request body.
+     * request body.
      */
     private $postRequestParams = null;
 
     /**
      * @var string representing the raw token sent by the client.
-     * 				In this specific implementation this is a base64 string
-     * 				encoding the Json Web Encriptyon (http://tools.ietf.org/html/draft-ietf-jose-json-web-encryption-08)
-     * 				having as payload a Json Web Signature (http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-08)
-     * 				having as payload a Json Web Token (http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-06)
+     * In this specific implementation this is a base64 string
+     * encoding the Json Web Encriptyon (http://tools.ietf.org/html/draft-ietf-jose-json-web-encryption-08)
+     * having as payload a Json Web Signature (http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-08)
+     * having as payload a Json Web Token (http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-06)
      */
     private $base64EncToken = null;
     
@@ -229,11 +224,12 @@ class Server_DataController extends Zend_Rest_Controller
     
     /**
      * 
-     * @var Server_DataServer_ServerInterface
+     * @var Backend_Model_Dati
      */
-    private $data_server;
+    private $backend;
 
     public function init() {
+
     	$this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         
@@ -246,85 +242,84 @@ class Server_DataController extends Zend_Rest_Controller
         self::$ERROR_DESCRIPTIONS = array(
         	self::$AUTH_HEADER_ERROR => 
         		array(self::$ERROR_PARAM_STRING => '',
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => '',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => '',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
         	
         	self::$INVALID_REQUEST_TWO_AUTH_METHOD_USED_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_REQUEST,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E1: more than one method for including an access token is used',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_REQUEST_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E1: more than one method for including an access token is used',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_REQUEST_HTTP_STATUS_CODE),
         	self::$INVALID_REQUEST_INVALID_PARAMETER_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_REQUEST,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E12: invalid parameters provided when making the request',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_REQUEST_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E12: invalid parameters provided when making the request',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_REQUEST_HTTP_STATUS_CODE),
         	/* it is not an invalid request... but it is not a invalid token nor insufficient scope */
         	self::$INVALID_REQUEST_DATA_NOT_FOUND =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_REQUEST,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E13: no data found :(',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_REQUEST_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E13: no data found :(',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_REQUEST_HTTP_STATUS_CODE),
         	
         	self::$INVALID_TOKEN_INCORRECT_SIGNATURE_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E2: the token is not authentic',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E2: the token is not authentic',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
         	self::$INVALID_TOKEN_JWE_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E3: the string representing the Json Web Encryption is not conformant to the specification',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E3: the string representing the Json Web Encryption is not conformant to the specification',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
     		self::$INVALID_TOKEN_JWS_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E4: the string representing the Json Web Signature is not conformant to the specification or the shared key was incorrect',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E4: the string representing the Json Web Signature is not conformant to the specification or the shared key was incorrect',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
     		self::$INVALID_TOKEN_JWT_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E5: the string representing the Json Web Token is not conformant to the specification',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E5: the string representing the Json Web Token is not conformant to the specification',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
     		self::$INVALID_TOKEN_SIGNATURE_CHECK_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E6: occured an error checking the signature. this resource server may not have the correct certificate to check the signature or the certificate cannot be read',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E6: occured an error checking the signature. this resource server may not have the correct certificate to check the signature or the certificate cannot be read',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
     		self::$INVALID_TOKEN_EXPIRED_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E7: the provided token is expired',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E7: the provided token is expired',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
         	self::$INVALID_TOKEN_GENERIC_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E8: a generic error occured checking the token (certificate file can be read?)',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E8: a generic error occured checking the token (certificate file can be read?)',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
         	self::$INVALID_TOKEN_INEXISTENT_ROWNER_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E9: the resource owner of the resources granted by the token provided does not exist on this server',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E9: the resource owner of the resources granted by the token provided does not exist on this server',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
     		self::$INVALID_TOKEN_INVALID_SCOPE_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INVALID_TOKEN,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E10: at least one scope granted by the current token is not valid on this server',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E10: at least one scope granted by the current token is not valid on this server',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INVALID_TOKEN_HTTP_STATUS_CODE),
         	self::$INSUFFICIENT_SCOPE_ERROR =>
         		array(self::$ERROR_PARAM_STRING => self::$ERROR_INSUFFICIENT_SCOPE,
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E11: insufficient scope to complete the request',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INSUFFICIENT_SCOPE_HTTP_STATUS_CODE),
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'E11: insufficient scope to complete the request',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => self::$ERROR_INSUFFICIENT_SCOPE_HTTP_STATUS_CODE),
         	self::$SERVER_INSTANTIATION_ERROR =>
         		array(self::$ERROR_PARAM_STRING => 'EMPTY',
-        				self::$ERROR_DESCRIPTION_PARAM_STRING => 'EMPTY',
-        				self::$ERROR_URI_PARAM_STRING => '',
-        				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => 500)
+       				self::$ERROR_DESCRIPTION_PARAM_STRING => 'EMPTY',
+       				self::$ERROR_URI_PARAM_STRING => '',
+       				self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING => 500)
     		);
-        
-        
+
     }
     
     /*
@@ -448,10 +443,10 @@ class Server_DataController extends Zend_Rest_Controller
     	
     	$this->queryRequestParams = $this->getRequest()->getQuery();
     	$this->postRequestParams = $this->getRequest()->getPost();
-    	$this->restRequestParams = array_diff_key($this->getRequest()->getUserParams(),
-									    			Server_DataController::$REST_IGNORED_PARAMS/*, 
-									    			$this->queryRequestParams, 
-									    			$this->postRequestParams*/);
+    	$this->restRequestParams = array_diff_key(
+		$this->getRequest()->getUserParams(),
+		Server_DataController::$REST_IGNORED_PARAMS
+		/*, $this->queryRequestParams, $this->postRequestParams*/);
     	
     	$this->error = $this->check_if_invalid_request();
     	if ($this->error())
@@ -481,18 +476,17 @@ class Server_DataController extends Zend_Rest_Controller
     		return $this->handleErrors();
     
     	try {
-    		$this->data_server = Server_Model_DataServer::getCurrentDataServer($this->token->get_scopes(), $this->token->get_subject());
+		$this->backend = new Backend_Model_Dati(
+			$this->token->get_scopes(),
+			$this->token->get_subject());
     	} catch (SubjectNotPresentException $e) {
     		$this->error = self::$INVALID_TOKEN_INEXISTENT_ROWNER_ERROR;
     	} catch (InvalidScopeException $e) {
     		$this->error = self::$INVALID_TOKEN_INVALID_SCOPE_ERROR;
-    	} catch (Server_Model_DataServerInstantiationException $e) {
-    		$this->error = self::$SERVER_INSTANTIATION_ERROR;
     	}
     	
     	if ($this->error())
     		return $this->handleErrors();
-    	
     }
     
     private function handleErrors() {
@@ -506,29 +500,28 @@ class Server_DataController extends Zend_Rest_Controller
     	
     	/* TODO what is the value of realm param */
     	$response[] = sprintf($str_format, 
-    							self::$AUTH_HEADER_RESPONSE_REALM_PARAM_STRING, 
-    							'TODO');
+    			self::$AUTH_HEADER_RESPONSE_REALM_PARAM_STRING,'TODO');
     	
     	/* error=value if value is not empty */
     	if (!empty($cur_error[self::$ERROR_PARAM_STRING]))
     		$response[] = sprintf($str_format, 
-    									self::$ERROR_PARAM_STRING, 
-    									$cur_error[self::$ERROR_PARAM_STRING]);
+				self::$ERROR_PARAM_STRING, 
+    				$cur_error[self::$ERROR_PARAM_STRING]);
     	/* error_description=value if value is not empty */
     	if (!empty($cur_error[self::$ERROR_DESCRIPTION_PARAM_STRING]))
     		$response[] = sprintf($str_format, 
-    									self::$ERROR_DESCRIPTION_PARAM_STRING, 
-    									$cur_error[self::$ERROR_DESCRIPTION_PARAM_STRING]);
+    				self::$ERROR_DESCRIPTION_PARAM_STRING, 
+    				$cur_error[self::$ERROR_DESCRIPTION_PARAM_STRING]);
     	/* error_uri=value if value is not empty */
     	if (!empty($cur_error[self::$ERROR_URI_PARAM_STRING]))
     		$response[] = sprintf($str_format, 
-    									self::$ERROR_URI_PARAM_STRING, 
-    									$cur_error[self::$ERROR_URI_PARAM_STRING]);
+    				self::$ERROR_URI_PARAM_STRING, 
+    				$cur_error[self::$ERROR_URI_PARAM_STRING]);
     	
     	if (!empty($this->cur_request_necessary_scopes))
     		$response[] = sprintf($str_format, 
-    									self::$AUTH_HEADER_RESPONSE_SCOPE_PARAM_STRING, 
-    									implode(' ', $this->cur_request_necessary_scopes));
+    				self::$AUTH_HEADER_RESPONSE_SCOPE_PARAM_STRING, 
+    				implode(' ', $this->cur_request_necessary_scopes));
     	
     	/* 
     	 * if use $this->getResponse->setHeader(HEADER, HEADER_VALUE) 
@@ -540,16 +533,16 @@ class Server_DataController extends Zend_Rest_Controller
     	 * WWW-Authenticate: Bearer realm="example", error="d"
     	 */
     	$this->getResponse()
-    			->setRawHeader(sprintf("%s: %s %s", self::$AUTH_HEADER_ERROR_RESPONSE,
-    												self::$AUTH_TOKEN_TYPE,
-    												implode(', ', $response)));
-    	
-    	$this->getResponse()
-    			->setHttpResponseCode($cur_error[self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING]);
+    		->setRawHeader(sprintf("%s: %s %s",
+				self::$AUTH_HEADER_ERROR_RESPONSE,
+	    			self::$AUTH_TOKEN_TYPE,
+				implode(', ', $response)));
+
+   	$this->getResponse()
+		->setHttpResponseCode($cur_error[self::$ERROR_HTTP_STATUS_CODE_PARAM_STRING]);
     	
     	//I cannot strip out the Vary, Content-Length, Content-Type headers...
     	//they are set by apache
-    	
     	
     	return $this->_forward('error');
     }
@@ -557,19 +550,16 @@ class Server_DataController extends Zend_Rest_Controller
     /*
      * dummy action....
      */
-    public function errorAction() {
-    	
-    }
+    public function errorAction() { }
 
     
     /* http request handles */
     public function indexAction() {        
         
         $params = array_merge($this->restRequestParams, $this->queryRequestParams);
-         
         $data_representation;
         try {
-        	$data_representation = $this->data_server->get($params);
+        	$data_representation = $this->backend->get($params);
         } catch (InvalidScopeException $e) {
         	$this->error = self::$INVALID_TOKEN_INVALID_SCOPE_ERROR;
        	} catch (InsufficientScopeException $e) {
@@ -584,17 +574,21 @@ class Server_DataController extends Zend_Rest_Controller
         	return $this->handleErrors();
 
         $this->getResponse()->setHeader(Zend_Http_Client::CONTENT_TYPE, 'application/json;charset=UTF-8');
+
+//$log = Zend_Registry::get('log');
+//$log->log("ciao ".serialize(json_decode(base64_decode($data_representation))),0);
+
         $this->getResponse()->setBody($data_representation);
         $this->getResponse()->setHttpResponseCode(200);
         return;
     }
 
     public function getAction() {
-    	 $params = array_merge($this->restRequestParams, $this->queryRequestParams);
+	$params = array_merge($this->restRequestParams, $this->queryRequestParams);
          
         $data_representation;
         try {
-        	$data_representation = $this->data_server->get($params);
+        	$data_representation = $this->backend->get($params);
         } catch (InvalidScopeException $e) {
         	$this->error = self::$INVALID_TOKEN_INVALID_SCOPE_ERROR;
        	} catch (InsufficientScopeException $e) {
@@ -615,6 +609,7 @@ class Server_DataController extends Zend_Rest_Controller
     }
 
     //TODO not implemented
+
     public function postAction() {
     	return $this->getResponse()->setHttpResponseCode(405);
     	
@@ -622,7 +617,7 @@ class Server_DataController extends Zend_Rest_Controller
     	$updated; //the decode data
     	
     	try {
-    		$this->data_server->update($current, $updated);
+    		$this->backend->update($current, $updated);
     	} catch (InsufficientScopeException $e) {
     		$this->error = self::$INSUFFICIENT_SCOPE_ERROR;
     	} catch (InvalidDataException $e) {
@@ -637,13 +632,14 @@ class Server_DataController extends Zend_Rest_Controller
     }
 
     //TODO not implemented
+
     public function putAction() {
     	return $this->getResponse()->setHttpResponseCode(405);
     	
     	$data;//retrieve the data and decode it
     	
     	try {
-    		$this->data_server->write($data);
+    		$this->backend->write($data);
     	} catch (InsufficientScopeException $e) {
     		$this->error = self::$INSUFFICIENT_SCOPE_ERROR;
     	} catch (InvalidDataException $e) {
@@ -657,13 +653,14 @@ class Server_DataController extends Zend_Rest_Controller
     }
 
     //TODO not implemented
+
     public function deleteAction() {
     	return $this->getResponse()->setHttpResponseCode(405);
     	
     	$data;//retrieve the data and decode it
     	 
     	try {
-    		$this->data_server->delete($data);
+    		$this->backend->delete($data);
     	} catch (InsufficientScopeException $e) {
     		$this->error = self::$INSUFFICIENT_SCOPE_ERROR;
     	} catch (InvalidDataException $e) {
@@ -680,13 +677,10 @@ class Server_DataController extends Zend_Rest_Controller
     public function headAction() {
     	return $this->getResponse()->setHttpResponseCode(405);
     }
+
     public function optionsAction() {
         $this->getResponse()->setBody(null);
         $this->getResponse()->setHeader("Allow", "OPTIONS, INDEX, GET");
     }
     
-    
 }
-
-
-

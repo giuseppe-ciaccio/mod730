@@ -302,13 +302,10 @@ class Application_Model_FormData {
 		return $data;
 	}
 	
-// 	public function 
-//TODO
+//TODO etc. etc.
 	public function interessiMutui() {
 		return '';
 	}
-	//TODO altri campi
-	
 
 }
 

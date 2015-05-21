@@ -4,7 +4,7 @@ class Oauth2_Model_TokenPartException extends Oauth2_Model_Exception {}
 
 class Oauth2_Model_TokenPart {
 	/*
-	 * CONSTANTS to decode token parts (tokens issued by Oauthwo)==============
+	 * CONSTANTS to decode token parts ==================================
 	 */
 	
 	/**
@@ -24,7 +24,7 @@ class Oauth2_Model_TokenPart {
 	private static $SCOPES_DELIMITER = ' ';
 	
 	/*
-	 * ========================================================================
+	 * ===================================================================
 	 */
 	
 	/**
@@ -47,25 +47,26 @@ class Oauth2_Model_TokenPart {
 	
 	
 	/*
-	 * Constructors ===========================================================
+	 * Constructors ======================================================
 	 */
 	
 	/**
 	 * parse $access_data to populate the object
-	 * @param string $rs_uri			the uri where to spend the $access_data
-	 * @param array $access_data		array of information to be used at 
-	 * 									resource server with $rs_uri
-	 * @throws Oauth2_Model_TokenPartException if some parameter does not 
-	 * 									exist or its value is empty
+	 * @param string $rs_uri
+	 *	the uri where to spend the $access_data
+	 * @param array $access_data
+	 *	array of information to be used at resource server with $rs_uri
+	 * @throws Oauth2_Model_TokenPartException
+	 *	if some parameter does not exist or its value is empty
 	 */
 	public function __construct($rs_uri, $access_data) {
 		if (empty($rs_uri) || !is_array($access_data))
 			throw new Oauth2_Model_TokenPartException('the params are not valid');
 	
 		if (!key_exists(self::$SCOPES_PARAM, $access_data) ||
-				empty($access_data[self::$SCOPES_PARAM]) ||
-				!key_exists(self::$TOKEN_PORTION_PARAM, $access_data) ||
-				empty($access_data[self::$TOKEN_PORTION_PARAM]))
+			empty($access_data[self::$SCOPES_PARAM]) ||
+			!key_exists(self::$TOKEN_PORTION_PARAM, $access_data) ||
+			empty($access_data[self::$TOKEN_PORTION_PARAM]))
 			throw new Oauth2_Model_TokenPartException('the params does not exist or the values are empty');
 	
 		$this->rs_uri = $rs_uri;
@@ -74,12 +75,7 @@ class Oauth2_Model_TokenPart {
 	}
 	
 	/*
-	 * ========================================================================
-	*/
-	
-	
-	/*
-	 * getters
+	 * Getters ===========================================================
 	 */
 	
 	/**
@@ -107,17 +103,17 @@ class Oauth2_Model_TokenPart {
 	}
 	
 	/*
-	 * ========================================================================
+	 * ===================================================================
 	 */
-	
-	
+
 	/**
 	 * 
-	 * @param string $str 						base64 encoded string representing 
-	 * 											the token issued by Oauthwo
-	 * @throws Oauth2_Model_TokenPartException			if the $str does not represent 
-	 * 											valid token parts
-	 * @return array[int]Oauth2_Model_TokenPart	the array of all tokens contained in the $str
+	 * @param string $str
+	 *	base64 encoded string representing the token
+	 * @throws Oauth2_Model_TokenPartException
+	 *	if the $str does not represent valid token parts.
+	 * @return array[int]Oauth2_Model_TokenPart
+	 *	the array of all tokens packed in the $str
 	 */
 	public static function getTokenParts($str) {
 		$tokenparts = array();

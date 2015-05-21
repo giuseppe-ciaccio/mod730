@@ -40,8 +40,10 @@ QUERY
 
     # creating the two new databases
     mysql --host=$DB_HOST --user=$DB_USER --password=$DB_USER_PWD <<QUERY
-CREATE DATABASE  \`$DB_RS\` ;
-CREATE DATABASE  \`$DB_DATA\` ;
+DROP DATABASE IF EXISTS \`$DB_RS\`;
+DROP DATABASE IF EXISTS \`$DB_DATA\`;
+CREATE DATABASE IF NOT EXISTS \`$DB_RS\`   DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS \`$DB_DATA\` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 QUERY
     check_error 'Error creating database "'$DB_TO_CREATE'" for mysql user "'$DB_USER'" with "'$DB_USER_PWD'" password'
 

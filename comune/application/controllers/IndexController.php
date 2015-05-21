@@ -8,11 +8,9 @@ class IndexController extends Zend_Controller_Action
     }
 
     public function indexAction() {
-    	//add new parameter to database.... the resource server name        
+    	// show a description of this RS
         $si = new Server_Model_ServerInfo();
         $this->view->description = $si->getDescription();
     }
 
-
 }
-

@@ -37,7 +37,7 @@ class Oauth2_Model_Token {
 	private static $TOKEN_TYPE_VALUE = 'bearer';
 	
 	/*
-	 * ========================================================================
+	 * ===================================================================
 	 */
 	
 	/**
@@ -48,7 +48,7 @@ class Oauth2_Model_Token {
 	 * the response was generated.
 	 * @var int
 	 */
-	private $exires_in;
+	private $expires_in;
 	
 	/**
 	 * rfc 6749 section 5.1. Successful Response
@@ -60,7 +60,7 @@ class Oauth2_Model_Token {
 	private $refresh_token;
 	
 	/**
-	 * unix timestamp when was recieved the token
+	 * unix timestamp when the token was issued
 	 * @var int
 	 */
 	private $issued_time;
@@ -79,16 +79,16 @@ class Oauth2_Model_Token {
 	
 	
 	/*
-	 * CONSTRUCTORS ===========================================================
+	 * CONSTRUCTORS ======================================================
 	 */
 	
 	/**
-	 * parse the string to extract a token issued by Oauthwo 
-	 * authorization server
-	 * @param string $str 				the base64 encoded string representing 
-	 * 									the token
-	 * @throws Oauth2_Model_TokenException 	if some params are not present or invalid
-	 * @throws Oauth2_Model_TokenPartException if some token part is malformed
+	 * parse the string to extract a token issued by Oauthwo AS.
+	 * @param string $str the base64 encoded string representing the token
+	 * @throws Oauth2_Model_TokenException
+	 *	if some params are not present or invalid
+	 * @throws Oauth2_Model_TokenPartException
+	 *	if some token part is malformed
 	 */
 	public function __construct($issuer_uri, $str) {
 		$content = json_decode($str, true);
@@ -105,7 +105,7 @@ class Oauth2_Model_Token {
 		if ($content[self::$TOKEN_TYPE_PARAM] != self::$TOKEN_TYPE_VALUE)
 			throw new Oauth2_Model_TokenException('the token type is not bearer');
 		
-		$this->exires_in = $content[self::$EXPIRES_IN_PARAM];
+		$this->expires_in = $content[self::$EXPIRES_IN_PARAM];
 		$this->refresh_token = $content[self::$REFRESH_TOKEN_PARAM];
 		$this->issued_time = time();
 		$this->issuer_uri = $issuer_uri;
@@ -114,7 +114,7 @@ class Oauth2_Model_Token {
 	}
 	
 	/*
-	 * ========================================================================
+	 * ===================================================================
 	 */
 	
 	/**
@@ -122,7 +122,7 @@ class Oauth2_Model_Token {
 	 * @return boolean true if the token is expired, false otherwise
 	 */
 	public function isExpired() {
-		return time() - $this->issued_time > $this->exires_in;
+		return time() - $this->issued_time > $this->expires_in;
 	}
 	
 	/**
@@ -164,8 +164,5 @@ class Oauth2_Model_Token {
 		
 		return null;
 	}
-	
-	
-	
-}
 
+}

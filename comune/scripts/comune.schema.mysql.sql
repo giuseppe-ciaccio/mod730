@@ -18,11 +18,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Database: `comune_dati`
 --
-DROP DATABASE `comune_dati`;
-CREATE DATABASE `comune_dati` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `comune_dati`;
-
--- --------------------------------------------------------
 
 --
 -- Struttura della tabella `nucleo_familiare`
@@ -37,12 +33,6 @@ CREATE TABLE IF NOT EXISTS `nucleo_familiare` (
   PRIMARY KEY (`id`),
   KEY `cf_app` (`cf_app`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dump dei dati per la tabella `nucleo_familiare`
---
-
-
 
 --
 -- Struttura della tabella `residente`

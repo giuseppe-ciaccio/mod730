@@ -21,19 +21,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 USE `comune_rs`;
 
 --
--- Dump dei dati per la tabella `as_pubkey`
+-- Dump dei dati per la tabella `scope`
 --
+-- TODO: gli URL assoluti non vanno bene xke richiede di cablare hostname
 
-INSERT INTO `as_pubkey` (`id`, `path`) VALUES
-('AS_1', 'public/pubkeys/as1_pub.pem'),
-('AS_2', 'public/pubkeys/as2_pub.pem'),
-('AS_3', 'public/pubkeys/as3_pub.pem'),
-('AS_4', 'public/pubkeys/as4_pub.pem'),
-('AS_5', 'public/pubkeys/as5_pub.pem');
+INSERT INTO `scope` (`scope_id`, `name`, `uri`, `description`) VALUES
+('SCOPE_1', 'read', 'https://localhost/comune/resource/readscope', 'lettura dati anagrafici'),
+('SCOPE_2', 'write', 'https://localhost/comune/resource/writescope', 'scrittura dati anagrafici'),
+('SCOPE_3', 'update', 'https://localhost/comune/resource/resource/updatescope', 'modifica dati anagrafici'),
+('SCOPE_4', 'delete', 'https://localhost/comune/resource/resource/deletescope', 'cancellazione dati anagrafici');
 
---
--- Dump dei dati per la tabella `rs_info`
---
--- the shared_secret_key in this case is md5sum of id
-INSERT INTO `rs_info` (`id`, `shared_secret_key`, `description`) VALUES
-('comune_rs_id', 'fe57e2b903694aefc6b87c87190d533f', 'Questo server si occupa delle richieste indirizzate al Comune.');

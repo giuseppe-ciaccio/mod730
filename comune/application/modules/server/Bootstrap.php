@@ -1,8 +1,9 @@
 <?php
 
 class Server_Bootstrap extends Zend_Application_Module_Bootstrap {
+
 	/**
-	 * Adds a path to the helper broker in order to serve our module specific
+	 * Adds a path to helper broker in order to serve our module specific
 	 * helpers
 	 *
 	 */
@@ -12,12 +13,10 @@ class Server_Bootstrap extends Zend_Application_Module_Bootstrap {
 	}
 	
 	/**
-	 * Adds factories and  mappers as resource type, enabling it auto-loading
+	 * Adds factories and mappers as resource type, enabling it auto-loading
 	 */
 	protected function _initResourceLoader() {
-// 		$this->_resourceLoader->addResourceType('builder', 'models/Builder', 'Builder');
 		$this->_resourceLoader->addResourceType('mapper', 'models/Mapper', 'Mapper');
-// 		$this->_resourceLoader->addResourceType('request', 'models/Request', 'Request');
-		$this->_resourceLoader->addResourceType('datasource', 'models/DataServer', 'DataServer');
 	}
+
 }

@@ -40,7 +40,8 @@ QUERY
 
     # creating the new database
     mysql --host=$DB_HOST --user=$DB_USER --password=$DB_USER_PWD <<QUERY
-CREATE DATABASE  \`$DB_TO_CREATE\` ;
+DROP DATABASE IF EXISTS \`$DB_TO_CREATE\`;
+CREATE DATABASE IF NOT EXISTS \`$DB_TO_CREATE\` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 QUERY
     check_error 'Error creating database "'$DB_TO_CREATE'" for mysql user "'$DB_USER'" with "'$DB_USER_PWD'" password'
 
@@ -50,7 +51,7 @@ QUERY
 function delete() {
     # delete the database
     mysql --host=$DB_HOST --user=$DB_USER --password=$DB_USER_PWD <<QUERY
-DROP DATABASE  \`$DB_TO_CREATE\` ;
+DROP DATABASE \`$DB_TO_CREATE\`;
 QUERY
     check_error 'Error deleting database "'$DB_TO_CREATE'" for mysql user "'$DB_USER'" with "'$DB_USER_PWD'" password'
     

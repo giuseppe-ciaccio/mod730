@@ -1,81 +1,84 @@
 <?php
 
 class Application_Model_ClientInfo {
+
 	/**
-	 * 
+	 * client id
+	 * @var string
+	 */
+	private $id;
+
+	/**
+	 * client secret
+	 * @var string
+	 */
+	private $secret;
+
+	/**
+	 * the application endpoint to which the authorization 
+	 * server will redirect after auth. approval or denial
+	 * @var string
+	 */
+	private $redirect_endpoint;
+
+	/**
+	 * info about the authorization server (auth. endpoint, token endpoint)
 	 * @var Application_Model_Client
 	 */
-	private $client;
+	private $authserver;
+
 	/**
-	 * 
+	 * the set of scopes known by this application.
 	 * @var array[int]Application_Model_Scope
 	 */
 	private $scopes;
-	
-	
+
 	public function __construct($redirect_endpoint) {
-		$cm = new Application_Mapper_Client();
+		$config = new Zend_Config_Ini(realpath(
+			APPLICATION_PATH.'/configs/application.ini'),
+			'production');
+		$this->id = $config->client->id;
+		$this->secret = $config->client->secret;
+		$this->redirect_endpoint = $redirect_endpoint;
+		$am = new Application_Mapper_Authserver();
 		$sm = new Application_Mapper_Scope();
-		
-		$this->client = $cm->getClient();
-		$this->scopes = $sm->fetchAll();
-		
-		$this->client->setRedirectEndpoint($redirect_endpoint);
+		$this->authserver = $am->get();
+		$this->scopes = $sm->get();
 	}
-	
-	/**
-	 * this application client id
-	 * @return string
-	 */
+
 	public function getId() {
-		return $this->client->getId();
+		return $this->id;
 	}
-	/**
-	 * this application client secret
-	 * @return string
-	 */
+
 	public function getSecret() {
-		return $this->client->getSecret();
+		return $this->secret;
 	}
-	/**
-	 * this application redirect uri
-	 * @return string
-	 */
+
 	public function getRedirectEndpoint() {
-		return $this->client->getRedirectEndpoint();
+		return $this->redirect_endpoint;
 	}
-	/**
-	 * the authorization endpoint
-	 * @return string
-	 */
+
 	public function getAsAuthEndpoint() {
-		return $this->client->getAsAuthEndpoint();
+		return $this->authserver->getAsAuthEndpoint();
 	}
-	/**
-	 * the token endpoint
-	 * @return string
-	 */
+
 	public function getAsTokenEndpoint() {
-		return $this->client->getAsTokenEndpoint();
+		return $this->authserver->getAsTokenEndpoint();
 	}
-	/**
-	 * 
-	 * @return array[int]Application_Model_Scope
-	 */
-	public function getSopes() {
+
+	public function getScopes() {
 		return $this->scopes;
 	}
-	
+
 	public function getScopeDescription($scope_id) {
 		if (empty($scope_id))
 			return null;
-		
+
 		foreach ($this->scopes as $s)
 			if ($s->getId() == $scope_id)
 				return $s->getDescription();
-		
+
 		return null;
 	}
-	
-}
 
+}

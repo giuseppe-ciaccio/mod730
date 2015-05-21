@@ -2,33 +2,34 @@
 
 
 class Oauth2_Model_ReceivedData {
+
 	/**
 	 * 
 	 * @var array[int]array[int]string
 	 */
 	private $data;
+
 	/**
 	 *
 	 * @var array[int]array[int]Oauth2_Model_TokenPart|string
 	 */
 	private $error;
-	
+
 	public function __construct() {
 		$this->data = array();
 		$this->error = array();
-		
 	}
-	
+
 	public function addData(Oauth2_Model_TokenPart $t, $str) {
 //$log = Zend_Registry::get('log');
 //$log->log("ciao recvd ".$str,0);
 		$this->data[] = array($t->getContactUri(), $str);
 	}
-	
+
 	public function addError(Oauth2_Model_TokenPart $t, $str) {
 		$this->error[] = array($t, $str);
 	}
-	
+
 	/**
 	 * 
 	 * @return array[int]array[int]Oauth2_Model_TokenPart|string
@@ -36,6 +37,7 @@ class Oauth2_Model_ReceivedData {
 	public function getData() {
 		return $this->data;
 	}
+
 	/**
 	 * 
 	 * @return array[int]array[int]Oauth2_Model_TokenPart|string
@@ -43,7 +45,7 @@ class Oauth2_Model_ReceivedData {
 	public function getErrors() {
 		return $this->error;
 	}
-	
+
 	/**
 	 * 
 	 * @param array $a
@@ -54,9 +56,7 @@ class Oauth2_Model_ReceivedData {
 			return null;
 		return $a[1];
 	}
-	
-	
-	
+
 	/**
 	 * 
 	 * @param array $a
@@ -68,7 +68,7 @@ class Oauth2_Model_ReceivedData {
 			return null;
 		return $tp->getScopes();
 	}
-	
+
 	/**
 	 *
 	 * @param array $a
@@ -79,5 +79,5 @@ class Oauth2_Model_ReceivedData {
 			return null;
 		return $a[0];
 	}
-}
 
+}

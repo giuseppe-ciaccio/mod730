@@ -37,24 +37,21 @@ class Server_Model_Token {
 	}
 	
 	/**
-	 * @return string representing the authorization 
-	 * 					server issued the token
+	 * @return string representing the name of token issuer AS
 	 */
 	public function get_issuer() {
 		return $this->tokenIssuer;
 	}
 	
 	/**
-	 * @return number representing the time before the 
-	 * 					token is not valid anymore
+	 * @return number representing the token expiration time
 	 */
 	public function get_exp_timestamp() {
 		return $this->expirationTimeStamp;
 	}
 	
 	/**
-	 * @return string representing the owner of resources 
-	 * 					that can be accessed by the current token
+	 * @return string representing the resources owner cited in the token
 	 */
 	public function get_subject() {
 		return $this->resourceOwner;
@@ -62,10 +59,10 @@ class Server_Model_Token {
 	
 	/**
 	 * 
-	 * @return array of string representing the scopes granted by 
-	 * 							the current token
+	 * @return array of string representing the scopes granted by token
 	 */
 	public function get_scopes() {
 		return $this->scopes;
 	}
+
 }

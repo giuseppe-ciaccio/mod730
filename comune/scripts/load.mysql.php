@@ -23,7 +23,6 @@ Zend_Loader_Autoloader::getInstance();
  * Definition of CLI options
  */
 $getopt = new Zend_Console_Getopt(array(
-            'data_instance-s'   =>  'Instance name of the specific DATA SERVER.',
             'rs_dbschema-s'     =>  'The file that contains the database schema '.
                                     'for the RESOURCE SERVER (the part that '.
                                     'manage the interaction between the '.
@@ -41,7 +40,7 @@ $getopt = new Zend_Console_Getopt(array(
             'data_dbdata-s'     =>  'The file that contains the default data '.
                                     'for the DATA SERVER (the back end data '.
                                     'server).',
-            'data_withdata'     =>  'Load the datafor the DATA SERVER (the back '.
+            'data_withdata'     =>  'Load the data for the DATA SERVER (the back '.
                                     'end data server).',
             'env-s'             =>  'Application environment for which to '.
                                     'create database (defaults to development)',
@@ -69,13 +68,6 @@ $rs_db_data_file = $getopt->getOption('rs_dbdata');
 $data_withdata = $getopt->getOption('data_withdata');
 $data_db_schema_file = $getopt->getOption('data_dbschema');
 $data_db_data_file = $getopt->getOption('data_dbdata');
-
-$data_instance = $getopt->getOption('data_instance');
-
-if ($data_instance == null) {
-	echo 'Must specify the instance of the DATA SERVER.'.PHP_EOL;
-	return false;
-}
 
 if ($rs_db_schema_file == null || $data_db_schema_file == null) {
 	echo 'Must provide the the schema files for the RESOURCE SERVER and the '.
@@ -155,7 +147,10 @@ echo PHP_EOL.'==================================================================
  * DATA SERVER database
  */
 $bootstrap->bootstrap();
-$data_dbAdapter = Zend_Registry::get($data_instance);
+$conf = new Zend_Config_Ini(
+	Backend_Bootstrap::MODULE_PATH.'/configs/config.ini');
+$data_dbAdapter = Zend_Db::factory($conf->resources->db);
+
 
 echo 'Writing the DATA SERVER database in (control-c to stop): '.PHP_EOL;
 for ($x = 3; $x > 0; $x--) {

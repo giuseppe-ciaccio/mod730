@@ -9,36 +9,18 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Database: `dichred_client`
---
-CREATE DATABASE IF NOT EXISTS `dichred_client` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `dichred_client`;
-
--- --------------------------------------------------------
-
 --
 -- Struttura della tabella `client`
 --
 
-DROP TABLE IF EXISTS `client`;
-CREATE TABLE IF NOT EXISTS `client` (
+DROP TABLE IF EXISTS `authserver`;
+CREATE TABLE IF NOT EXISTS `authserver` (
   `id` varchar(200) NOT NULL,
-  `secret` varchar(500) NOT NULL,
   `description` text NOT NULL,
-  `as_auth_endpoint` varchar(2000) NOT NULL,
-  `as_token_endpoint` varchar(2000) NOT NULL,
+  `auth_endpoint` varchar(2000) NOT NULL,
+  `token_endpoint` varchar(2000) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='This table holds the client info';
-
-
--- --------------------------------------------------------
 
 --
 -- Struttura della tabella `scope`
@@ -50,7 +32,3 @@ CREATE TABLE IF NOT EXISTS `scope` (
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='This table holds scopes used to request data';
-
-
--- --------------------------------------------------------
-

@@ -67,7 +67,7 @@ for ($x = 5; $x > 0; $x--) {
 try {
 	$schemaSql = file_get_contents($db_schema_file);
 	if (!$schemaSql)
-		throw new Exception("The db schema file cannot be readed.");
+		throw new Exception("The db schema file cannot be read.");
 	if ($dbAdapter->getConnection()->exec($schemaSql))
 		throw new Exception("The db schema contains invalid queries");	
 	
@@ -76,7 +76,7 @@ try {
 	if ($withData) {
 		$dataSql = file_get_contents($db_data_file);
 		if (!$dataSql)
-			throw new Exception("The db data file cannot be readed.");
+			throw new Exception("The db data file cannot be read.");
 		if ($dbAdapter->getConnection()->exec($dataSql))
 			throw new Exception("The db data file contains invalid queries");
 		echo 'Data Loaded.'.PHP_EOL;

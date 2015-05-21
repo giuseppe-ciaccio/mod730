@@ -1,0 +1,32 @@
+<h1>Resource Set Endpoint</h1>
+
+<?php 
+
+if($this->display){
+
+echo  "<h2>Resource Set Description</h2></br>". "Id del Resource Set: " . $this->rsetid . "</br>" .
+"Nome del Resource Set: " . $this->rsetname . "</br>" .
+"Descrizione del Resource Set: " . $this->rsetde ."</br>" .
+"Tabella: " . $this->rsettab  . "</br>";
+
+if(!empty($this->rsettype)){
+	echo  "Tipo: <a href=" . $this->rsettype . ">" . $this->rsettype . "</a></br>";
+}
+   
+echo  "Scopes: ";
+
+foreach($this->allsco as $s){ 
+	echo "</br><a href=" . $s->getScopeUri() . ">" . $s->getScopeUri() . "</a>";
+} 
+ 
+}
+else{
+	echo "<h2>Resource Set JSON Object Dump</h2></br>";
+	var_dump($this->obj); 
+}
+?>
+
+
+
+
+
